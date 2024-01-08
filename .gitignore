@@ -1,0 +1,65 @@
+# Ignore virtual environment
+project/
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore logs and output files
+*.log
+output.txt
+
+# Ignore uploaded files
+uploads/
+
+# Ignore local development files
+*.sqlite
+*.pyc
+*.pyo
+*.pyc
+*.pyo
+*.pyc
+*.pyo
+*.pyc
+*.pyo
+*.pyc
+*.pyo
+*.pyc
+*.pyo
+
+# Ignore generated documentation
+doc/
+
+# Ignore system-specific files
+Thumbs.db
+.DS_Store
+
+# Ignore editor-specific files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.user
+*.sln
+*.swp
+
+# Ignore temporary files
+*.tmp
+*.bak
+*.swp
+*.~*
+
+# Ignore executables
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore package files
+*.zip
+*.rar
+*.gz
+*.tar
+*.7z

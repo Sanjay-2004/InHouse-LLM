@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Processing App</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      #outputContainer {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #fff;
+      }
+
+      .output-text {
+        white-space: pre-wrap;
+        font-family: "Courier New", Courier, monospace;
+      }
+
+      #loadingIcon {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="container mt-5">
+      <h1 class="mb-4">Text Processing App</h1>
+
+      <form id="textForm">
+        <div class="mb-3">
+          <label for="textInput" class="form-label"
+            >Enter Text or Upload a File:</label
+          >
+          <textarea
+            class="form-control"
+            id="textInput"
+            rows="5"
+            placeholder="Paste text or upload a file"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="fileInput" class="form-label">Upload Image or PDF:</label>
+          <input class="form-control" type="file" id="fileInput" />
+        </div>
+
+        <div class="mb-3" id="questionsContainer" style="display: none">
+          <label for="questionsInput" class="form-label"
+            >Enter Questions (Separate with '\n'):</label
+          >
+          <textarea
+            class="form-control"
+            id="questionsInput"
+            rows="3"
+            placeholder="Enter questions"
+          ></textarea>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="toggleQuestionsInput()"
+        >
+          Toggle Questions Input
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="processText('headline')"
+        >
+          Headline
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="processText('summarize')"
+        >
+          Summarize
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="generateQuestions()"
+        >
+          Generate Questions
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="processText('img2txt')"
+        >
+          Image to Text
+        </button>
+      </form>
+
+      <div class="mt-4" id="outputContainer">
+        <div class="output-text" id="outputText"></div>
+        <div id="loadingIcon" class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+      function processText(action) {
+        var textInput = document.getElementById("textInput").value;
+        var fileInput = document.getElementById("fileInput").files[0];
+        var questionsInput = document.getElementById("questionsInput").value;
+
+        document.getElementById("loadingIcon").style.display = "inline-block";
+
+        var formData = new FormData();
+        formData.append("text", textInput);
+        formData.append("file", fileInput);
+        formData.append("action", action);
+
+        if (action === "generateQuestions") {
+          formData.append("questionsInput", questionsInput);
+        }
+
+        $.ajax({
+          url: "/process_text",
+          type: "POST",
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+            document.getElementById("loadingIcon").style.display = "none";
+            document.getElementById("outputText").innerHTML = data;
+          },
+          error: function (error) {
+            console.error("Error:", error);
+          },
+        });
+      }
+
+      function toggleQuestionsInput() {
+        var questionsContainer = document.getElementById("questionsContainer");
+        questionsContainer.style.display =
+          questionsContainer.style.display === "none" ? "block" : "none";
+      }
+
+      function generateQuestions() {
+        processText("generateQuestions");
+      }
+    </script>
+  </body>
+</html>
